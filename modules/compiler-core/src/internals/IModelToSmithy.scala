@@ -219,11 +219,12 @@ private[compiler] final class IModelToSmithy(useEnumTraitSyntax: Boolean)
       values.foreach(v =>
         enumTraitBuilder.addEnum(EnumDefinition.builder.value(v).build())
       )
-      StringShape
+      val builder = StringShape
         .builder()
         .id(id.toSmithy)
         .addTrait(enumTraitBuilder.build())
-        .build()
+      hintsToTraits(hints).foreach(builder.addTrait(_))
+      builder.build()
     } else {
       val enumBuilder = EnumShape.builder().id(id.toSmithy)
       values.zipWithIndex.foreach { case (value, idx) =>
